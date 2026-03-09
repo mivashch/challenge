@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { createClient } from "@/lib/supabase-server";
 import { UserMenu } from "@/components/UserMenu";
+import { BookOpen } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +31,14 @@ export default async function RootLayout({
 
   return (
     <html lang="en" style={{ colorScheme: 'light dark' }}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
         <Providers>
           <header className="border-b border-border/50 bg-card/60 backdrop-blur-sm sticky top-0 z-10">
             <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm shrink-0">D</div>
+                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shrink-0">
+                  <BookOpen className="w-4 h-4" />
+                </div>
                 <div>
                   <h1 className="text-lg font-bold tracking-tight leading-none">Dev Knowledge Hub</h1>
                   <p className="text-xs text-muted-foreground">Your centralized developer knowledge base</p>
