@@ -6,15 +6,18 @@ import { toast } from 'sonner'
 import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { LinkCard } from './LinkCard'
 import { LinkForm } from './LinkForm'
 import { fetchLinks, createLink } from '@/lib/queries'
+import { SortKey, SORT_OPTIONS, sortItems } from '@/lib/sort'
 
 export function LinkList({ technologyId }: { technologyId: string }) {
   const queryClient = useQueryClient()
   const [createOpen, setCreateOpen] = useState(false)
   const [search, setSearch] = useState('')
+  const [sortKey, setSortKey] = useState<SortKey>('created_desc')
 
   const { data: links, isLoading, isError } = useQuery({
     queryKey: ['links', technologyId],
@@ -38,12 +41,14 @@ export function LinkList({ technologyId }: { technologyId: string }) {
   const filtered = links?.filter((l) =>
     l.url.toLowerCase().includes(search.toLowerCase()) ||
     l.title?.toLowerCase().includes(search.toLowerCase())
-  )
+  ) ?? []
+
+  const sorted = sortItems(filtered, sortKey, (l) => l.title ?? l.url)
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1">
+      <div className="flex items-center gap-2 flex-wrap">
+        <div className="relative flex-1 min-w-32">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Search links..."
@@ -52,20 +57,30 @@ export function LinkList({ technologyId }: { technologyId: string }) {
             className="pl-9 h-8 text-sm"
           />
         </div>
-        <Button size="sm" onClick={() => setCreateOpen(true)}>+ Add</Button>
+        <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
+          <SelectTrigger className="w-40 h-8 text-sm shrink-0">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {SORT_OPTIONS.map((o) => (
+              <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button size="sm" onClick={() => setCreateOpen(true)} className="shrink-0">+ Add</Button>
       </div>
 
       <p className="text-xs text-muted-foreground">
-        {filtered?.length ?? 0} of {links?.length ?? 0} link(s)
+        {sorted.length} of {links?.length ?? 0} link(s)
       </p>
 
-      {filtered?.length === 0 ? (
+      {sorted.length === 0 ? (
         <p className="text-sm text-muted-foreground">
           {search ? `No results for "${search}"` : 'No links yet.'}
         </p>
       ) : (
         <div className="space-y-2">
-          {filtered?.map((link) => (
+          {sorted.map((link) => (
             <LinkCard key={link.id} link={link} technologyId={technologyId} />
           ))}
         </div>

@@ -3,6 +3,7 @@ export type Technology = {
   name: string
   description: string | null
   created_at: string
+  updated_at: string
 }
 
 export type Command = {
@@ -11,6 +12,7 @@ export type Command = {
   command: string
   description: string | null
   created_at: string
+  updated_at: string
 }
 
 export type Link = {
@@ -19,6 +21,7 @@ export type Link = {
   url: string
   title: string | null
   created_at: string
+  updated_at: string
 }
 
 export type Note = {
@@ -26,4 +29,5 @@ export type Note = {
   technology_id: string
   content: string
   created_at: string
+  updated_at: string
 }
