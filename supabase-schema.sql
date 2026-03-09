@@ -3,6 +3,7 @@
 
 create table if not exists technologies (
   id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
   name text not null,
   description text,
   created_at timestamptz not null default now()
@@ -31,8 +32,28 @@ create table if not exists notes (
   created_at timestamptz not null default now()
 );
 
--- Enable Row Level Security (optional - remove if not needed)
--- alter table technologies enable row level security;
--- alter table commands enable row level security;
--- alter table links enable row level security;
--- alter table notes enable row level security;
+-- Row Level Security
+alter table technologies enable row level security;
+alter table commands enable row level security;
+alter table links enable row level security;
+alter table notes enable row level security;
+
+-- Technologies: 
+create policy "technologies: owner access" on technologies
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+-- Commands/Links/Notes: 
+create policy "commands: owner access" on commands
+  for all using (
+    exists (select 1 from technologies where id = commands.technology_id and user_id = auth.uid())
+  );
+
+create policy "links: owner access" on links
+  for all using (
+    exists (select 1 from technologies where id = links.technology_id and user_id = auth.uid())
+  );
+
+create policy "notes: owner access" on notes
+  for all using (
+    exists (select 1 from technologies where id = notes.technology_id and user_id = auth.uid())
+  );
