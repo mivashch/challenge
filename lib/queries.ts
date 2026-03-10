@@ -53,6 +53,31 @@ export async function deleteTechnology(id: string): Promise<void> {
   if (error) throw error
 }
 
+export async function generatePublicToken(id: string): Promise<Technology> {
+  const supabase = createClient()
+  const token = crypto.randomUUID()
+  const { data, error } = await supabase
+    .from('technologies')
+    .update({ public_token: token })
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function revokePublicToken(id: string): Promise<Technology> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('technologies')
+    .update({ public_token: null })
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
 // Commands
 export async function fetchCommands(technologyId: string): Promise<Command[]> {
   const supabase = createClient()

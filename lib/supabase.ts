@@ -4,6 +4,7 @@ export type Technology = {
   description: string | null
   created_at: string
   updated_at: string
+  public_token: string | null
 }
 
 export type Command = {

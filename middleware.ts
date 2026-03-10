@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Захищені маршрути — редирект на /login якщо не авторизований
-  if (!user && pathname !== '/login' && pathname !== '/auth/callback') {
+  if (!user && pathname !== '/login' && pathname !== '/auth/callback' && !pathname.startsWith('/share')) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
