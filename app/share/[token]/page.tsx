@@ -4,8 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import { PublicNoteCard } from '@/components/notes/PublicNoteCard'
 
 export default async function PublicSharePage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params
@@ -26,7 +25,7 @@ export default async function PublicSharePage({ params }: { params: Promise<{ to
   ])
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6">
       <div className="flex items-start justify-between gap-3">
         <div>
           <h1 className="text-3xl font-bold">{tech.name}</h1>
@@ -91,13 +90,7 @@ export default async function PublicSharePage({ params }: { params: Promise<{ to
           <TabsContent value="notes" className="mt-4 space-y-3">
             {notes?.length === 0 && <p className="text-muted-foreground text-sm">No notes.</p>}
             {notes?.map((note) => (
-              <Card key={note.id}>
-                <CardContent className="pt-4">
-                  <div className="prose prose-sm dark:prose-invert max-w-none">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.content}</ReactMarkdown>
-                  </div>
-                </CardContent>
-              </Card>
+              <PublicNoteCard key={note.id} content={note.content} />
             ))}
           </TabsContent>
         </Tabs>
