@@ -1,17 +1,19 @@
 import { notFound } from 'next/navigation'
 import { ExternalLink, BookOpen } from 'lucide-react'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase-server'
+import { createClient, createPublicClient } from '@/lib/supabase-server'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { PublicNoteCard } from '@/components/notes/PublicNoteCard'
+import { CopyButton } from './CopyButton'
 
 export default async function PublicSharePage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params
-  const supabase = await createClient()
 
-  const { data: tech } = await supabase
+  const publicSupabase = createPublicClient()
+
+  const { data: tech } = await publicSupabase
     .from('technologies')
     .select('*')
     .eq('public_token', token)
@@ -20,10 +22,13 @@ export default async function PublicSharePage({ params }: { params: Promise<{ to
   if (!tech) notFound()
 
   const [{ data: commands }, { data: links }, { data: notes }] = await Promise.all([
-    supabase.from('commands').select('*').eq('technology_id', tech.id).order('created_at', { ascending: false }),
-    supabase.from('links').select('*').eq('technology_id', tech.id).order('created_at', { ascending: false }),
-    supabase.from('notes').select('*').eq('technology_id', tech.id).order('created_at', { ascending: false }),
+    publicSupabase.from('commands').select('*').eq('technology_id', tech.id).order('created_at', { ascending: false }),
+    publicSupabase.from('links').select('*').eq('technology_id', tech.id).order('created_at', { ascending: false }),
+    publicSupabase.from('notes').select('*').eq('technology_id', tech.id).order('created_at', { ascending: false }),
   ])
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
   return (
     <div className="min-h-screen">
@@ -44,7 +49,10 @@ export default async function PublicSharePage({ params }: { params: Promise<{ to
               <p className="text-muted-foreground mt-1">{tech.description}</p>
             )}
           </div>
-          <Badge variant="secondary" className="shrink-0 mt-1">Read-only</Badge>
+          <div className="flex items-center gap-2 shrink-0 mt-1">
+            {user && <CopyButton token={token} />}
+            <Badge variant="secondary">Read-only</Badge>
+          </div>
         </div>
 
         <Tabs defaultValue="commands">
