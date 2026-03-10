@@ -53,8 +53,8 @@ export function LoginForm() {
   }
 
   return (
-    <Card>
-      <CardContent className="pt-6 space-y-4">
+    <Card className="bg-card/40 backdrop-blur-xl border-white/10">
+      <CardContent className="pt-5 space-y-3">
         <Button
           type="button"
           variant="outline"
@@ -70,7 +70,7 @@ export function LoginForm() {
             <span className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs text-muted-foreground">
-            <span className="bg-card px-2">or continue with email</span>
+            <span className="bg-transparent px-2">or continue with email</span>
           </div>
         </div>
 
