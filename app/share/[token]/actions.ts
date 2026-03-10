@@ -1,9 +1,8 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { createClient, createPublicClient } from '@/lib/supabase-server'
 
-export async function copyTechnology(token: string) {
+export async function copyTechnology(token: string): Promise<string> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Not authenticated')
@@ -50,5 +49,5 @@ export async function copyTechnology(token: string) {
       : Promise.resolve(),
   ])
 
-  redirect(`/technologies/${newTech.id}`)
+  return newTech.id
 }

@@ -1,17 +1,23 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
 import { Copy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { copyTechnology } from './actions'
 
 export function CopyButton({ token }: { token: string }) {
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const queryClient = useQueryClient()
 
   async function handleCopy() {
     setLoading(true)
     try {
-      await copyTechnology(token)
+      const newId = await copyTechnology(token)
+      await queryClient.invalidateQueries({ queryKey: ['technologies'] })
+      router.push(`/technologies/${newId}`)
     } catch {
       setLoading(false)
     }
