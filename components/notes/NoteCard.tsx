@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Pencil, Trash2, ChevronDown, ChevronUp } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -14,9 +14,13 @@ import { updateNote, deleteNote } from '@/lib/queries'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
+const firstLine = (content: string) => content.split('\n')[0].replace(/^#+\s*/, '').trim()
+
 export function NoteCard({ note, technologyId }: { note: Note; technologyId: string }) {
   const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = useState(false)
+  const isLong = note.content.includes('\n') || note.content.length > 120
+  const [expanded, setExpanded] = useState(!isLong)
 
   const updateMutation = useMutation({
     mutationFn: (data: { content: string }) => updateNote(note.id, data),
@@ -41,10 +45,19 @@ export function NoteCard({ note, technologyId }: { note: Note; technologyId: str
     <>
       <Card>
         <CardContent className="pt-4 space-y-2">
-          <div className="prose prose-sm dark:prose-invert max-w-none">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.content}</ReactMarkdown>
-          </div>
-          <div className="flex gap-2 justify-end">
+          {expanded ? (
+            <div className="prose prose-sm dark:prose-invert max-w-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.content}</ReactMarkdown>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground truncate">{firstLine(note.content)}</p>
+          )}
+          <div className="flex gap-2 justify-end items-center">
+            {isLong && (
+              <Button variant="ghost" size="sm" className="h-7 text-xs text-muted-foreground px-2" onClick={() => setExpanded(!expanded)}>
+                {expanded ? <><ChevronUp className="w-3.5 h-3.5 mr-1" />Collapse</> : <><ChevronDown className="w-3.5 h-3.5 mr-1" />Expand</>}
+              </Button>
+            )}
             <Button variant="ghost" size="icon" onClick={() => setEditOpen(true)}>
               <Pencil className="w-4 h-4" />
             </Button>
@@ -72,6 +85,7 @@ export function NoteCard({ note, technologyId }: { note: Note; technologyId: str
             </AlertDialog>
           </div>
         </CardContent>
+
       </Card>
 
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
