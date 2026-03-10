@@ -75,16 +75,18 @@ export function NoteCard({ note, technologyId }: { note: Note; technologyId: str
       </Card>
 
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent>
-          <DialogHeader>
+        <DialogContent className="max-w-[90vw] w-[90vw] max-h-[90vh] h-[90vh] flex flex-col">
+          <DialogHeader className="shrink-0">
             <DialogTitle>Edit Note</DialogTitle>
           </DialogHeader>
-          <NoteForm
-            initial={note}
-            onSubmit={(data) => updateMutation.mutate(data)}
-            onCancel={() => setEditOpen(false)}
-            loading={updateMutation.isPending}
-          />
+          <div className="flex-1 min-h-0">
+            <NoteForm
+              initial={note}
+              onSubmit={(data) => updateMutation.mutate(data)}
+              onCancel={() => setEditOpen(false)}
+              loading={updateMutation.isPending}
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </>

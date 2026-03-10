@@ -86,15 +86,17 @@ export function NoteList({ technologyId }: { technologyId: string }) {
       )}
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent>
-          <DialogHeader>
+        <DialogContent className="max-w-[90vw] w-[90vw] max-h-[90vh] h-[90vh] flex flex-col">
+          <DialogHeader className="shrink-0">
             <DialogTitle>Add Note</DialogTitle>
           </DialogHeader>
-          <NoteForm
-            onSubmit={(data) => createMutation.mutate(data)}
-            onCancel={() => setCreateOpen(false)}
-            loading={createMutation.isPending}
-          />
+          <div className="flex-1 min-h-0">
+            <NoteForm
+              onSubmit={(data) => createMutation.mutate(data)}
+              onCancel={() => setCreateOpen(false)}
+              loading={createMutation.isPending}
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </div>
