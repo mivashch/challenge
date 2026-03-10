@@ -200,3 +200,30 @@ export async function deleteNote(id: string): Promise<void> {
   const { error } = await supabase.from('notes').delete().eq('id', id)
   if (error) throw error
 }
+
+// Global Search
+export type SearchResults = {
+  technologies: { id: string; name: string; description: string | null }[]
+  commands: { id: string; command: string; description: string | null; technology_id: string; technology_name: string }[]
+  links: { id: string; url: string; title: string | null; technology_id: string; technology_name: string }[]
+  notes: { id: string; content: string; technology_id: string; technology_name: string }[]
+}
+
+export async function globalSearch(query: string): Promise<SearchResults> {
+  const supabase = createClient()
+  const q = `%${query}%`
+
+  const [techRes, cmdRes, linkRes, noteRes] = await Promise.all([
+    supabase.from('technologies').select('id, name, description').ilike('name', q),
+    supabase.from('commands').select('id, command, description, technology_id, technologies(name)').ilike('command', q),
+    supabase.from('links').select('id, url, title, technology_id, technologies(name)').or(`url.ilike.${q},title.ilike.${q}`),
+    supabase.from('notes').select('id, content, technology_id, technologies(name)').ilike('content', q),
+  ])
+
+  return {
+    technologies: techRes.data ?? [],
+    commands: (cmdRes.data ?? []).map((c: any) => ({ ...c, technology_name: c.technologies?.name ?? '' })),
+    links: (linkRes.data ?? []).map((l: any) => ({ ...l, technology_name: l.technologies?.name ?? '' })),
+    notes: (noteRes.data ?? []).map((n: any) => ({ ...n, technology_name: n.technologies?.name ?? '' })),
+  }
+}

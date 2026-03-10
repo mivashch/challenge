@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase-server'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 export default async function PublicSharePage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params
@@ -91,7 +93,9 @@ export default async function PublicSharePage({ params }: { params: Promise<{ to
             {notes?.map((note) => (
               <Card key={note.id}>
                 <CardContent className="pt-4">
-                  <p className="text-sm whitespace-pre-wrap">{note.content}</p>
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.content}</ReactMarkdown>
+                  </div>
                 </CardContent>
               </Card>
             ))}

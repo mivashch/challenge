@@ -11,6 +11,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { NoteForm } from './NoteForm'
 import { Note } from '@/lib/supabase'
 import { updateNote, deleteNote } from '@/lib/queries'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 export function NoteCard({ note, technologyId }: { note: Note; technologyId: string }) {
   const queryClient = useQueryClient()
@@ -39,7 +41,9 @@ export function NoteCard({ note, technologyId }: { note: Note; technologyId: str
     <>
       <Card>
         <CardContent className="pt-4 space-y-2">
-          <p className="text-sm whitespace-pre-wrap">{note.content}</p>
+          <div className="prose prose-sm dark:prose-invert max-w-none">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.content}</ReactMarkdown>
+          </div>
           <div className="flex gap-2 justify-end">
             <Button variant="ghost" size="icon" onClick={() => setEditOpen(true)}>
               <Pencil className="w-4 h-4" />

@@ -4,7 +4,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { createClient } from "@/lib/supabase-server";
 import { UserMenu } from "@/components/UserMenu";
-import { BookOpen } from "lucide-react";
+import { Sidebar } from "@/components/Sidebar";
+import { GlobalSearch } from "@/components/GlobalSearch";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,27 +30,30 @@ export default async function RootLayout({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  const isPublicRoute = false // middleware handles redirect, layout just adapts
+
   return (
     <html lang="en" style={{ colorScheme: 'light dark' }}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
-          <header className="border-b border-border/50 bg-card/60 backdrop-blur-sm sticky top-0 z-10">
-            <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground shrink-0">
-                  <BookOpen className="w-4 h-4" />
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold tracking-tight leading-none">Dev Knowledge Hub</h1>
-                  <p className="text-xs text-muted-foreground">Your centralized developer knowledge base</p>
-                </div>
+          {user ? (
+            <div className="flex min-h-screen">
+              <Sidebar />
+              <div className="flex-1 ml-60 flex flex-col min-h-screen">
+                <header className="h-14 border-b border-border/40 bg-card/40 backdrop-blur-sm sticky top-0 z-10 flex items-center px-6 gap-4">
+                  <GlobalSearch />
+                  <div className="ml-auto">
+                    <UserMenu email={user.email ?? ''} />
+                  </div>
+                </header>
+                <main className="flex-1 p-6 max-w-5xl w-full mx-auto">
+                  {children}
+                </main>
               </div>
-              {user && <UserMenu email={user.email ?? ''} />}
             </div>
-          </header>
-          <main className="max-w-5xl mx-auto px-4 py-8">
-            {children}
-          </main>
+          ) : (
+            <main>{children}</main>
+          )}
         </Providers>
       </body>
     </html>
