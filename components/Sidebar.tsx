@@ -36,12 +36,12 @@ export function Sidebar() {
     <>
       <aside className="w-60 shrink-0 border-r border-border/50 bg-card/30 backdrop-blur-sm flex flex-col fixed top-0 bottom-0 left-0 z-20 overflow-hidden">
         {/* Logo */}
-        <div className="h-14 flex items-center gap-2.5 px-4 border-b border-border/40 shrink-0">
+        <Link href="/" className="h-14 flex items-center gap-2.5 px-4 border-b border-border/40 shrink-0 hover:opacity-80 transition-opacity">
           <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center shrink-0">
             <BookOpen className="w-3.5 h-3.5 text-primary-foreground" />
           </div>
           <span className="font-bold text-sm leading-tight">Dev Knowledge Hub</span>
-        </div>
+        </Link>
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">

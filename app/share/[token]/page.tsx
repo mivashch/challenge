@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
-import { ExternalLink } from 'lucide-react'
+import { ExternalLink, BookOpen } from 'lucide-react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -25,16 +26,26 @@ export default async function PublicSharePage({ params }: { params: Promise<{ to
   ])
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h1 className="text-3xl font-bold">{tech.name}</h1>
-          {tech.description && (
-            <p className="text-muted-foreground mt-1">{tech.description}</p>
-          )}
+    <div className="min-h-screen">
+      <header className="h-14 border-b border-border/40 bg-card/40 backdrop-blur-sm flex items-center px-6">
+        <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
+          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center shrink-0">
+            <BookOpen className="w-3.5 h-3.5 text-primary-foreground" />
+          </div>
+          <span className="font-bold text-sm">Dev Knowledge Hub</span>
+        </Link>
+      </header>
+
+      <div className="max-w-3xl mx-auto p-6 space-y-6">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h1 className="text-3xl font-bold">{tech.name}</h1>
+            {tech.description && (
+              <p className="text-muted-foreground mt-1">{tech.description}</p>
+            )}
+          </div>
+          <Badge variant="secondary" className="shrink-0 mt-1">Read-only</Badge>
         </div>
-        <Badge variant="secondary" className="shrink-0 mt-1">Read-only</Badge>
-      </div>
 
         <Tabs defaultValue="commands">
           <TabsList>
@@ -94,6 +105,7 @@ export default async function PublicSharePage({ params }: { params: Promise<{ to
             ))}
           </TabsContent>
         </Tabs>
+      </div>
     </div>
   )
 }
