@@ -5,8 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { Layers, Plus, ChevronDown, ChevronRight, BookOpen } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Layers, Plus, ChevronDown, ChevronRight, BookOpen, Share2 } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
 import { fetchTechnologies, createTechnology } from '@/lib/queries'
@@ -88,6 +87,27 @@ export function Sidebar() {
                 </button>
               </div>
             )}
+          </div>
+
+          {/* Shared Links section */}
+          <div className="mt-2 pt-2 border-t border-border/40">
+            <Link
+              href="/shared"
+              className={cn(
+                'flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors',
+                pathname === '/shared'
+                  ? 'bg-primary/15 text-primary font-medium'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+              )}
+            >
+              <Share2 className="w-3.5 h-3.5 shrink-0" />
+              <span>Shared Links</span>
+              {technologies?.filter(t => t.public_token).length ? (
+                <span className="ml-auto text-xs bg-primary/20 text-primary rounded-full px-1.5 py-0.5 leading-none">
+                  {technologies.filter(t => t.public_token).length}
+                </span>
+              ) : null}
+            </Link>
           </div>
         </nav>
       </aside>
