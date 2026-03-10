@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
-import { BookOpen, ExternalLink } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 import { createClient } from '@/lib/supabase-server'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -24,22 +24,16 @@ export default async function PublicSharePage({ params }: { params: Promise<{ to
   ])
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-border/40 bg-background/60 backdrop-blur-md sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center gap-2">
-          <BookOpen className="w-5 h-5 text-primary" />
-          <span className="font-semibold text-sm">Dev Knowledge Hub</span>
-          <Badge variant="secondary" className="ml-auto text-xs">Read-only</Badge>
-        </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-6">
+    <div className="space-y-6">
+      <div className="flex items-start justify-between gap-3">
         <div>
           <h1 className="text-3xl font-bold">{tech.name}</h1>
           {tech.description && (
             <p className="text-muted-foreground mt-1">{tech.description}</p>
           )}
         </div>
+        <Badge variant="secondary" className="shrink-0 mt-1">Read-only</Badge>
+      </div>
 
         <Tabs defaultValue="commands">
           <TabsList>
@@ -103,7 +97,6 @@ export default async function PublicSharePage({ params }: { params: Promise<{ to
             ))}
           </TabsContent>
         </Tabs>
-      </main>
     </div>
   )
 }
