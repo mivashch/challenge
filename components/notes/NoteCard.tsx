@@ -50,7 +50,7 @@ export function NoteCard({ note, technologyId }: { note: Note; technologyId: str
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{note.content}</ReactMarkdown>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground truncate">{firstLine(note.content)}</p>
+            <p className="text-sm truncate">{firstLine(note.content)}</p>
           )}
           <div className="flex gap-2 justify-end items-center">
             {isLong && (
