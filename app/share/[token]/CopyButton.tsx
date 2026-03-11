@@ -17,7 +17,7 @@ export function CopyButton({ token }: { token: string }) {
     try {
       const newId = await copyTechnology(token)
       await queryClient.refetchQueries({ queryKey: ['technologies'] })
-      router.push(`/technologies/${newId}`)
+      router.push(`/?highlight=${newId}`)
     } catch {
       setLoading(false)
     }
