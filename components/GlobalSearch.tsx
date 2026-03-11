@@ -2,12 +2,48 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, Terminal, Link2, FileText, Layers } from 'lucide-react'
+import { Search, Terminal, Link2, FileText } from 'lucide-react'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
 import { globalSearch, SearchResults } from '@/lib/queries'
+
+type Group = {
+  techId: string
+  techName: string
+  techDescription?: string | null
+  isTechMatch: boolean
+  commands: SearchResults['commands']
+  links: SearchResults['links']
+  notes: SearchResults['notes']
+}
+
+function buildGroups(results: SearchResults): Group[] {
+  const map = new Map<string, Group>()
+
+  function getOrCreate(techId: string, techName: string, techDescription?: string | null, isTechMatch = false) {
+    if (!map.has(techId)) {
+      map.set(techId, { techId, techName, techDescription, isTechMatch, commands: [], links: [], notes: [] })
+    }
+    if (isTechMatch) map.get(techId)!.isTechMatch = true
+    return map.get(techId)!
+  }
+
+  for (const t of results.technologies) {
+    getOrCreate(t.id, t.name, t.description, true)
+  }
+  for (const c of results.commands) {
+    getOrCreate(c.technology_id, c.technology_name).commands.push(c)
+  }
+  for (const l of results.links) {
+    getOrCreate(l.technology_id, l.technology_name).links.push(l)
+  }
+  for (const n of results.notes) {
+    getOrCreate(n.technology_id, n.technology_name).notes.push(n)
+  }
+
+  return Array.from(map.values())
+}
 
 export function GlobalSearch() {
   const router = useRouter()
@@ -51,6 +87,7 @@ export function GlobalSearch() {
     router.push(path)
   }
 
+  const groups = results ? buildGroups(results) : []
   const total = results
     ? results.technologies.length + results.commands.length + results.links.length + results.notes.length
     : 0
@@ -89,77 +126,57 @@ export function GlobalSearch() {
                 <p className="text-sm text-muted-foreground text-center py-6">No results for "{query}"</p>
               )}
 
-              {results.technologies.length > 0 && (
-                <section>
-                  <p className="text-xs font-medium text-muted-foreground px-2 py-1 flex items-center gap-1.5">
-                    <Layers className="w-3 h-3" /> Technologies
-                  </p>
-                  {results.technologies.map((t) => (
-                    <button
-                      key={t.id}
-                      onClick={() => navigate(`/?highlight=${t.id}`)}
-                      className="w-full text-left px-3 py-2 rounded-md hover:bg-accent text-sm flex items-center gap-2"
-                    >
-                      <span className="font-medium">{t.name}</span>
-                      {t.description && <span className="text-muted-foreground truncate text-xs">{t.description}</span>}
-                    </button>
-                  ))}
-                </section>
-              )}
+              {groups.map((group) => (
+                <div key={group.techId} className="mb-1">
+                  {/* Technology header — clickable */}
+                  <button
+                    onClick={() => navigate(`/?highlight=${group.techId}`)}
+                    className="w-full text-left px-3 py-2 rounded-md hover:bg-accent flex items-center gap-2"
+                  >
+                    <span className="text-sm font-semibold">{group.techName}</span>
+                    {group.isTechMatch && group.techDescription && (
+                      <span className="text-xs text-muted-foreground truncate">{group.techDescription}</span>
+                    )}
+                  </button>
 
-              {results.commands.length > 0 && (
-                <section>
-                  <p className="text-xs font-medium text-muted-foreground px-2 py-1 flex items-center gap-1.5">
-                    <Terminal className="w-3 h-3" /> Commands
-                  </p>
-                  {results.commands.map((c) => (
+                  {/* Commands */}
+                  {group.commands.map((c) => (
                     <button
                       key={c.id}
-                      onClick={() => navigate(`/?highlight=${c.technology_id}&section=commands&item=${c.id}`)}
-                      className="w-full text-left px-3 py-2 rounded-md hover:bg-accent text-sm flex items-start gap-2"
+                      onClick={() => navigate(`/?highlight=${group.techId}&section=commands&item=${c.id}`)}
+                      className="w-full text-left pl-7 pr-3 py-1.5 rounded-md hover:bg-accent/60 flex items-center gap-2"
                     >
-                      <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded shrink-0 max-w-[200px] truncate">{c.command}</code>
-                      <Badge variant="outline" className="text-[10px] h-5 shrink-0">{c.technology_name}</Badge>
+                      <Terminal className="w-3 h-3 text-muted-foreground shrink-0" />
+                      <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded truncate max-w-xs">{c.command}</code>
+                      {c.description && <span className="text-xs text-muted-foreground truncate">{c.description}</span>}
                     </button>
                   ))}
-                </section>
-              )}
 
-              {results.links.length > 0 && (
-                <section>
-                  <p className="text-xs font-medium text-muted-foreground px-2 py-1 flex items-center gap-1.5">
-                    <Link2 className="w-3 h-3" /> Links
-                  </p>
-                  {results.links.map((l) => (
+                  {/* Links */}
+                  {group.links.map((l) => (
                     <button
                       key={l.id}
-                      onClick={() => navigate(`/?highlight=${l.technology_id}&section=links&item=${l.id}`)}
-                      className="w-full text-left px-3 py-2 rounded-md hover:bg-accent text-sm flex items-center gap-2"
+                      onClick={() => navigate(`/?highlight=${group.techId}&section=links&item=${l.id}`)}
+                      className="w-full text-left pl-7 pr-3 py-1.5 rounded-md hover:bg-accent/60 flex items-center gap-2"
                     >
-                      <span className="truncate">{l.title || l.url}</span>
-                      <Badge variant="outline" className="text-[10px] h-5 shrink-0">{l.technology_name}</Badge>
+                      <Link2 className="w-3 h-3 text-muted-foreground shrink-0" />
+                      <span className="text-xs truncate">{l.title || l.url}</span>
                     </button>
                   ))}
-                </section>
-              )}
 
-              {results.notes.length > 0 && (
-                <section>
-                  <p className="text-xs font-medium text-muted-foreground px-2 py-1 flex items-center gap-1.5">
-                    <FileText className="w-3 h-3" /> Notes
-                  </p>
-                  {results.notes.map((n) => (
+                  {/* Notes */}
+                  {group.notes.map((n) => (
                     <button
                       key={n.id}
-                      onClick={() => navigate(`/?highlight=${n.technology_id}&section=notes&item=${n.id}`)}
-                      className="w-full text-left px-3 py-2 rounded-md hover:bg-accent text-sm flex items-center gap-2"
+                      onClick={() => navigate(`/?highlight=${group.techId}&section=notes&item=${n.id}`)}
+                      className="w-full text-left pl-7 pr-3 py-1.5 rounded-md hover:bg-accent/60 flex items-center gap-2"
                     >
-                      <span className="truncate text-xs">{n.content.slice(0, 80)}</span>
-                      <Badge variant="outline" className="text-[10px] h-5 shrink-0">{n.technology_name}</Badge>
+                      <FileText className="w-3 h-3 text-muted-foreground shrink-0" />
+                      <span className="text-xs text-muted-foreground truncate">{n.content.slice(0, 80)}</span>
                     </button>
                   ))}
-                </section>
-              )}
+                </div>
+              ))}
             </div>
           )}
 
