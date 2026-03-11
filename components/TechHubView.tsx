@@ -5,8 +5,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { fetchTechnologies, createTechnology } from '@/lib/queries'
+import { SortKey, SORT_OPTIONS, sortItems } from '@/lib/sort'
 import { TechnologyForm } from './technologies/TechnologyForm'
 import { TechRowItem } from './technologies/TechRowItem'
 
@@ -14,6 +16,7 @@ export function TechHubView() {
   const queryClient = useQueryClient()
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
   const [createOpen, setCreateOpen] = useState(false)
+  const [sortKey, setSortKey] = useState<SortKey>('created_desc')
 
   const { data: technologies, isLoading } = useQuery({
     queryKey: ['technologies'],
@@ -33,7 +36,7 @@ export function TechHubView() {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Toolbar */}
-      <div className="px-5 py-3 border-b border-border/50 flex items-center justify-between shrink-0">
+      <div className="px-5 py-3 border-b border-border/50 flex items-center gap-3 shrink-0">
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Technologies</span>
           {technologies && (
@@ -42,10 +45,22 @@ export function TechHubView() {
             </span>
           )}
         </div>
-        <Button size="sm" variant="ghost" className="h-7 px-2 gap-1 text-xs" onClick={() => setCreateOpen(true)}>
-          <Plus className="w-3.5 h-3.5" />
-          Add
-        </Button>
+        <div className="ml-auto flex items-center gap-2">
+          <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
+            <SelectTrigger className="h-7 text-xs w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_OPTIONS.map((o) => (
+                <SelectItem key={o.value} value={o.value} className="text-xs">{o.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button size="sm" variant="ghost" className="h-7 px-2 gap-1 text-xs" onClick={() => setCreateOpen(true)}>
+            <Plus className="w-3.5 h-3.5" />
+            Add
+          </Button>
+        </div>
       </div>
 
       {/* List */}
@@ -58,7 +73,7 @@ export function TechHubView() {
             No technologies yet. Click <strong>Add</strong> to get started.
           </div>
         )}
-        {technologies?.map((tech) => (
+        {sortItems(technologies ?? [], sortKey, (t) => t.name).map((tech) => (
           <TechRowItem
             key={tech.id}
             tech={tech}

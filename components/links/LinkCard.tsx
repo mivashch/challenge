@@ -20,6 +20,7 @@ export function LinkCard({ link, technologyId }: { link: Link; technologyId: str
     mutationFn: (data: { url: string; title: string }) => updateLink(link.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['links', technologyId] })
+      queryClient.invalidateQueries({ queryKey: ['technologies'] })
       setEditOpen(false)
       toast.success('Link updated')
     },
@@ -30,6 +31,7 @@ export function LinkCard({ link, technologyId }: { link: Link; technologyId: str
     mutationFn: () => deleteLink(link.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['links', technologyId] })
+      queryClient.invalidateQueries({ queryKey: ['technologies'] })
       toast.success('Link deleted')
     },
     onError: () => toast.error('Failed to delete link'),

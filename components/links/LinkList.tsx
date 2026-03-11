@@ -29,6 +29,7 @@ export function LinkList({ technologyId }: { technologyId: string }) {
       createLink({ technology_id: technologyId, ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['links', technologyId] })
+      queryClient.invalidateQueries({ queryKey: ['technologies'] })
       setCreateOpen(false)
       toast.success('Link added')
     },

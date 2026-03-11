@@ -29,6 +29,7 @@ export function CommandList({ technologyId }: { technologyId: string }) {
       createCommand({ technology_id: technologyId, ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['commands', technologyId] })
+      queryClient.invalidateQueries({ queryKey: ['technologies'] })
       setCreateOpen(false)
       toast.success('Command added')
     },

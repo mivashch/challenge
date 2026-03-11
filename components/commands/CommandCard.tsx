@@ -28,6 +28,7 @@ export function CommandCard({ cmd, technologyId }: { cmd: Command; technologyId:
     mutationFn: (data: { command: string; description: string }) => updateCommand(cmd.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['commands', technologyId] })
+      queryClient.invalidateQueries({ queryKey: ['technologies'] })
       setEditOpen(false)
       toast.success('Command updated')
     },
@@ -38,6 +39,7 @@ export function CommandCard({ cmd, technologyId }: { cmd: Command; technologyId:
     mutationFn: () => deleteCommand(cmd.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['commands', technologyId] })
+      queryClient.invalidateQueries({ queryKey: ['technologies'] })
       toast.success('Command deleted')
     },
     onError: () => toast.error('Failed to delete command'),

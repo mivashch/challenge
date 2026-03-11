@@ -29,6 +29,7 @@ export function NoteList({ technologyId }: { technologyId: string }) {
       createNote({ technology_id: technologyId, ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes', technologyId] })
+      queryClient.invalidateQueries({ queryKey: ['technologies'] })
       setCreateOpen(false)
       toast.success('Note added')
     },

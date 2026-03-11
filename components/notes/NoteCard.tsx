@@ -26,6 +26,7 @@ export function NoteCard({ note, technologyId }: { note: Note; technologyId: str
     mutationFn: (data: { content: string }) => updateNote(note.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes', technologyId] })
+      queryClient.invalidateQueries({ queryKey: ['technologies'] })
       setEditOpen(false)
       toast.success('Note updated')
     },
@@ -36,6 +37,7 @@ export function NoteCard({ note, technologyId }: { note: Note; technologyId: str
     mutationFn: () => deleteNote(note.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes', technologyId] })
+      queryClient.invalidateQueries({ queryKey: ['technologies'] })
       toast.success('Note deleted')
     },
     onError: () => toast.error('Failed to delete note'),
