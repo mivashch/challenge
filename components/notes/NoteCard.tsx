@@ -58,7 +58,7 @@ export function NoteCard({ note, technologyId, isHighlighted }: { note: Note; te
 
   return (
     <>
-      <Card id={`note-${note.id}`} className={cn('transition-colors duration-700', highlighted && 'ring-2 ring-primary/50 bg-primary/5')}>
+      <Card id={`note-${note.id}`} className={cn('transition-colors duration-700', highlighted && 'ring-2 ring-primary bg-accent')}>
         <CardContent className="pt-4 space-y-2">
           {expanded ? (
             <div className="prose prose-sm dark:prose-invert max-w-none">

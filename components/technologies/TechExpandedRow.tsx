@@ -40,23 +40,23 @@ export function TechExpandedRow({ technologyId, defaultSection, highlightItemId 
   ]
 
   return (
-    <div className="bg-accent/5">
+    <div className="bg-muted">
       {sections.map((section, i) => (
-        <div key={section.key} className={cn(i > 0 && 'border-t border-border/20')}>
+        <div key={section.key} className={cn(i > 0 && 'border-t border-border')}>
           <button
             onClick={() => setOpenSections(prev => {
               const next = new Set(prev)
               next.has(section.key) ? next.delete(section.key) : next.add(section.key)
               return next
             })}
-            className="w-full flex items-center gap-2.5 pl-10 pr-5 py-2.5 hover:bg-accent/40 transition-colors"
+            className="w-full flex items-center gap-2.5 pl-10 pr-5 py-2.5 hover:bg-accent transition-colors"
           >
             {openSections.has(section.key)
               ? <ChevronDown className="w-3 h-3 text-muted-foreground shrink-0" />
               : <ChevronRight className="w-3 h-3 text-muted-foreground shrink-0" />}
             <section.Icon className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
             <span className="text-sm text-muted-foreground">{section.label}</span>
-            <span className="text-xs bg-accent text-muted-foreground rounded-full px-1.5 py-0.5 leading-none">
+            <span className="text-xs bg-accent text-muted-foreground rounded px-1.5 py-0.5 leading-none">
               {section.count}
             </span>
           </button>

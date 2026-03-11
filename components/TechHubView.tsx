@@ -60,11 +60,11 @@ export function TechHubView() {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Toolbar */}
-      <div className="px-5 py-3 border-b border-border/50 flex items-center gap-3 shrink-0">
+      <div className="px-5 py-3 border-b border-border flex items-center gap-3 shrink-0">
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Technologies</span>
           {technologies && (
-            <span className="text-xs text-muted-foreground bg-accent rounded-full px-1.5 py-0.5 leading-none">
+            <span className="text-xs text-muted-foreground bg-accent rounded px-1.5 py-0.5 leading-none">
               {technologies.length}
             </span>
           )}

@@ -82,9 +82,9 @@ export function TechDetailPanel({ id, onClose }: { id: string; onClose: () => vo
   if (!tech) return <div className="p-6 text-sm text-destructive">Not found.</div>
 
   return (
-    <div className="flex flex-col h-full border-l border-border/50">
+    <div className="flex flex-col h-full border-l border-border">
       {/* Header */}
-      <div className="px-5 py-4 border-b border-border/50 shrink-0">
+      <div className="px-5 py-4 border-b border-border shrink-0">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h2 className="text-lg font-bold truncate">{tech.name}</h2>

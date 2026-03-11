@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase-server";
 import { UserMenu } from "@/components/UserMenu";
 import { Sidebar } from "@/components/Sidebar";
 import { GlobalSearch } from "@/components/GlobalSearch";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,16 +32,17 @@ export default async function RootLayout({
   const { data: { user } } = await supabase.auth.getUser()
 
   return (
-    <html lang="en" style={{ colorScheme: 'light dark' }}>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
           {user ? (
             <div className="flex h-screen overflow-hidden">
               <Sidebar />
               <div className="flex-1 ml-60 flex flex-col h-screen overflow-hidden">
-                <header className="h-14 border-b border-border/40 bg-card/40 backdrop-blur-sm shrink-0 z-10 flex items-center px-6 gap-4">
+                <header className="h-14 border-b border-border bg-card shrink-0 z-10 flex items-center px-6 gap-4">
                   <GlobalSearch />
-                  <div className="ml-auto">
+                  <div className="ml-auto flex items-center gap-1">
+                    <ThemeToggle />
                     <UserMenu email={user.email ?? ''} />
                   </div>
                 </header>

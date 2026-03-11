@@ -97,24 +97,24 @@ export function PublicTechAccordion({
   ]
 
   return (
-    <div className="border border-border/50 rounded-lg overflow-hidden">
+    <div className="border border-border rounded overflow-hidden">
       {sections.map((section, i) => (
-        <div key={section.key} className={cn(i > 0 && 'border-t border-border/40')}>
+        <div key={section.key} className={cn(i > 0 && 'border-t border-border')}>
           <button
             onClick={() => toggle(section.key)}
-            className="w-full flex items-center gap-2.5 px-4 py-3 hover:bg-accent/40 transition-colors text-left"
+            className="w-full flex items-center gap-2.5 px-4 py-3 hover:bg-accent transition-colors text-left"
           >
             {openSections.has(section.key)
               ? <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
               : <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />}
             <section.Icon className="w-4 h-4 text-muted-foreground shrink-0" />
             <span className="text-sm font-medium">{section.label}</span>
-            <span className="text-xs bg-accent text-muted-foreground rounded-full px-1.5 py-0.5 leading-none">
+            <span className="text-xs bg-accent text-muted-foreground rounded px-1.5 py-0.5 leading-none">
               {section.count}
             </span>
           </button>
           {openSections.has(section.key) && (
-            <div className="px-4 pb-4 pt-1 border-t border-border/30 bg-accent/5">
+            <div className="px-4 pb-4 pt-1 border-t border-border bg-muted">
               {section.content}
             </div>
           )}

@@ -77,8 +77,8 @@ export function TechRowItem({ tech, isExpanded, isHighlighted, onToggle, default
 
   return (
     <>
-      <div id={`tech-${tech.id}`} className={cn('group border-b border-border/30 transition-colors duration-700', isExpanded && 'bg-primary/5', isHighlighted && 'bg-primary/20')}>
-        <div className="flex items-center gap-2 px-4 py-3 hover:bg-accent/30 transition-colors">
+      <div id={`tech-${tech.id}`} className={cn('group border-b border-border transition-colors duration-700', isExpanded && 'bg-accent', isHighlighted && 'bg-primary/20')}>
+        <div className="flex items-center gap-2 px-4 py-3 hover:bg-accent transition-colors">
           {/* Expand toggle — takes up most of the row */}
           <button
             onClick={onToggle}

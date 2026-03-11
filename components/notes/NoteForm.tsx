@@ -44,7 +44,7 @@ export function NoteForm({ initial, onSubmit, onCancel, loading }: NoteFormProps
         {/* Preview */}
         <div className="flex-1 flex flex-col min-w-0">
           <p className="text-xs font-medium text-muted-foreground mb-1.5">Preview</p>
-          <div className="flex-1 rounded-md border border-input bg-background/50 px-4 py-3 text-sm prose prose-sm dark:prose-invert max-w-none overflow-y-auto min-h-[420px]">
+          <div className="flex-1 rounded border border-input bg-background px-4 py-3 text-sm prose prose-sm dark:prose-invert max-w-none overflow-y-auto min-h-[420px]">
             {content ? (
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
             ) : (

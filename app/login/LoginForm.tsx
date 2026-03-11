@@ -53,7 +53,7 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="bg-card/40 backdrop-blur-xl border-white/10">
+    <Card className="bg-card border-border shadow-sm">
       <CardContent className="pt-5 space-y-3">
         <Button
           type="button"

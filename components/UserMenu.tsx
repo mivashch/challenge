@@ -16,7 +16,7 @@ export function UserMenu({ email }: { email: string }) {
   return (
     <div className="flex items-center gap-3">
       <div className="flex items-center gap-2">
-        <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-semibold">
+        <div className="w-8 h-8 rounded-full bg-[#FF8B00] text-white flex items-center justify-center text-xs font-bold select-none">
           {initials}
         </div>
         <span className="text-sm text-muted-foreground hidden sm:block truncate max-w-[160px]">{email}</span>

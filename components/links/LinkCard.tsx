@@ -51,7 +51,7 @@ export function LinkCard({ link, technologyId, isHighlighted }: { link: Link; te
 
   return (
     <>
-      <Card id={`link-${link.id}`} className={cn('transition-colors duration-700', highlighted && 'ring-2 ring-primary/50 bg-primary/5')}>
+      <Card id={`link-${link.id}`} className={cn('transition-colors duration-700', highlighted && 'ring-2 ring-primary bg-accent')}>
         <CardContent className="pt-4 flex items-center justify-between gap-2">
           <a
             href={link.url}

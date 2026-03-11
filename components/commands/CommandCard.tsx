@@ -6,7 +6,6 @@ import { toast } from 'sonner'
 import { Copy, Check, Pencil, Trash2 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { cn } from '@/lib/utils'
@@ -59,7 +58,7 @@ export function CommandCard({ cmd, technologyId, isHighlighted }: { cmd: Command
 
   return (
     <>
-      <Card id={`cmd-${cmd.id}`} className={cn('transition-colors duration-700', highlighted && 'ring-2 ring-primary/50 bg-primary/5')}>
+      <Card id={`cmd-${cmd.id}`} className={cn('transition-colors duration-700', highlighted && 'ring-2 ring-primary bg-accent')}>
         <CardContent className="pt-4 space-y-2">
           <div className="flex items-start justify-between gap-2">
             <code className="font-mono text-sm bg-muted px-2 py-1 rounded flex-1 break-all">

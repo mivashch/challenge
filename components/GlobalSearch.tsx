@@ -96,7 +96,7 @@ export function GlobalSearch() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 h-9 rounded-md border border-input bg-background/50 text-sm text-muted-foreground hover:bg-accent transition-colors w-48 lg:w-64"
+        className="flex items-center gap-2 px-3 h-9 rounded border border-input bg-background text-sm text-muted-foreground hover:bg-accent transition-colors w-48 lg:w-64"
       >
         <Search className="w-4 h-4 shrink-0" />
         <span className="flex-1 text-left truncate">Search...</span>
@@ -131,7 +131,7 @@ export function GlobalSearch() {
                   {/* Technology header — clickable */}
                   <button
                     onClick={() => navigate(`/?highlight=${group.techId}`)}
-                    className="w-full text-left px-3 py-2 rounded-md hover:bg-accent flex items-center gap-2"
+                    className="w-full text-left px-3 py-2 rounded hover:bg-accent flex items-center gap-2"
                   >
                     <span className="text-sm font-semibold">{group.techName}</span>
                     {group.isTechMatch && group.techDescription && (
@@ -144,7 +144,7 @@ export function GlobalSearch() {
                     <button
                       key={c.id}
                       onClick={() => navigate(`/?highlight=${group.techId}&section=commands&item=${c.id}`)}
-                      className="w-full text-left pl-7 pr-3 py-1.5 rounded-md hover:bg-accent/60 flex items-center gap-2"
+                      className="w-full text-left pl-7 pr-3 py-1.5 rounded hover:bg-accent flex items-center gap-2"
                     >
                       <Terminal className="w-3 h-3 text-muted-foreground shrink-0" />
                       <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded truncate max-w-xs">{c.command}</code>
@@ -157,7 +157,7 @@ export function GlobalSearch() {
                     <button
                       key={l.id}
                       onClick={() => navigate(`/?highlight=${group.techId}&section=links&item=${l.id}`)}
-                      className="w-full text-left pl-7 pr-3 py-1.5 rounded-md hover:bg-accent/60 flex items-center gap-2"
+                      className="w-full text-left pl-7 pr-3 py-1.5 rounded hover:bg-accent flex items-center gap-2"
                     >
                       <Link2 className="w-3 h-3 text-muted-foreground shrink-0" />
                       <span className="text-xs truncate">{l.title || l.url}</span>
@@ -169,7 +169,7 @@ export function GlobalSearch() {
                     <button
                       key={n.id}
                       onClick={() => navigate(`/?highlight=${group.techId}&section=notes&item=${n.id}`)}
-                      className="w-full text-left pl-7 pr-3 py-1.5 rounded-md hover:bg-accent/60 flex items-center gap-2"
+                      className="w-full text-left pl-7 pr-3 py-1.5 rounded hover:bg-accent flex items-center gap-2"
                     >
                       <FileText className="w-3 h-3 text-muted-foreground shrink-0" />
                       <span className="text-xs text-muted-foreground truncate">{n.content.slice(0, 80)}</span>
