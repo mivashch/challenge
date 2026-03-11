@@ -40,7 +40,7 @@
    JIRA DARK THEME  (activated by .dark on <html>)
    ───────────────────────────────────────── */
 .dark {
-  --background:           oklch(0.162 0.008 264);   /* #1D2125           */
+  --background:           oklch(0.149 0.003 264);   /* #1f1f21           */
   --foreground:           oklch(0.843 0.018 264);   /* #C7D1DB           */
   --card:                 oklch(0.191 0.009 264);   /* #22272B           */
   --card-foreground:      oklch(0.843 0.018 264);
