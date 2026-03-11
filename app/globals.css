@@ -38,33 +38,34 @@
 
 /* ─────────────────────────────────────────
    JIRA DARK THEME  (activated by .dark on <html>)
+   Unified #1f1f21 (darker) used everywhere as background.
    ───────────────────────────────────────── */
 .dark {
-  --background:           oklch(0.149 0.003 264);   /* #1f1f21           */
+  --background:           #1f1f21;
   --foreground:           oklch(0.843 0.018 264);   /* #C7D1DB           */
-  --card:                 oklch(0.191 0.009 264);   /* #22272B           */
+  --card:                 #1f1f21;
   --card-foreground:      oklch(0.843 0.018 264);
-  --popover:              oklch(0.191 0.009 264);
+  --popover:              #1f1f21;
   --popover-foreground:   oklch(0.843 0.018 264);
   --primary:              oklch(0.691 0.172 264);   /* #579DFF           */
   --primary-foreground:   oklch(0.162 0.008 264);
-  --secondary:            oklch(0.222 0.010 264);   /* #282E33           */
+  --secondary:            #1f1f21;
   --secondary-foreground: oklch(0.843 0.018 264);
-  --muted:                oklch(0.222 0.010 264);
+  --muted:                #1f1f21;
   --muted-foreground:     oklch(0.632 0.030 264);   /* #8696A7           */
-  --accent:               oklch(0.222 0.010 264);
+  --accent:               #1f1f21;
   --accent-foreground:    oklch(0.843 0.018 264);
   --destructive:          oklch(0.631 0.240 28);    /* #FF5630           */
   --border:               oklch(0.330 0.030 264);   /* #3B4A55           */
   --input:                oklch(0.330 0.030 264);
   --ring:                 oklch(0.691 0.172 264);
 
-  /* Sidebar dark */
-  --sidebar:                     oklch(0.191 0.009 264); /* #22272B      */
+  /* Sidebar dark — same #1f1f21 */
+  --sidebar:                     #1f1f21;
   --sidebar-foreground:          oklch(0.843 0.018 264); /* #C7D1DB      */
   --sidebar-muted:               oklch(0.632 0.030 264); /* #8696A7      */
   --sidebar-border:              oklch(0.330 0.030 264); /* #3B4A55      */
-  --sidebar-active:              oklch(0.260 0.055 264);
+  --sidebar-active:              oklch(0.260 0.055 264); /* highlight for active nav item */
   --sidebar-active-foreground:   oklch(0.691 0.172 264); /* #579DFF      */
 }
 
