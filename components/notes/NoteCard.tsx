@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Pencil, Trash2, ChevronDown, ChevronUp } from 'lucide-react'
@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
+import { cn } from '@/lib/utils'
 import { NoteForm } from './NoteForm'
 import { Note } from '@/lib/supabase'
 import { updateNote, deleteNote } from '@/lib/queries'
@@ -16,11 +17,23 @@ import remarkGfm from 'remark-gfm'
 
 const firstLine = (content: string) => content.split('\n')[0].replace(/^#+\s*/, '').trim()
 
-export function NoteCard({ note, technologyId }: { note: Note; technologyId: string }) {
+export function NoteCard({ note, technologyId, isHighlighted }: { note: Note; technologyId: string; isHighlighted?: boolean }) {
   const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = useState(false)
   const isLong = note.content.includes('\n') || note.content.length > 120
   const [expanded, setExpanded] = useState(!isLong)
+  const [highlighted, setHighlighted] = useState(false)
+
+  useEffect(() => {
+    if (!isHighlighted) return
+    setHighlighted(true)
+    setExpanded(true)
+    setTimeout(() => {
+      document.getElementById(`note-${note.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 150)
+    const t = setTimeout(() => setHighlighted(false), 1800)
+    return () => clearTimeout(t)
+  }, [isHighlighted, note.id])
 
   const updateMutation = useMutation({
     mutationFn: (data: { content: string }) => updateNote(note.id, data),
@@ -45,7 +58,7 @@ export function NoteCard({ note, technologyId }: { note: Note; technologyId: str
 
   return (
     <>
-      <Card>
+      <Card id={`note-${note.id}`} className={cn('transition-colors duration-700', highlighted && 'ring-2 ring-primary/50 bg-primary/5')}>
         <CardContent className="pt-4 space-y-2">
           {expanded ? (
             <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -87,7 +100,6 @@ export function NoteCard({ note, technologyId }: { note: Note; technologyId: str
             </AlertDialog>
           </div>
         </CardContent>
-
       </Card>
 
       <Dialog open={editOpen} onOpenChange={setEditOpen}>

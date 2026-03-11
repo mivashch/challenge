@@ -11,8 +11,14 @@ import { NoteList } from '@/components/notes/NoteList'
 
 type Section = 'commands' | 'links' | 'notes'
 
-export function TechExpandedRow({ technologyId }: { technologyId: string }) {
-  const [openSections, setOpenSections] = useState<Set<Section>>(new Set())
+export function TechExpandedRow({ technologyId, defaultSection, highlightItemId }: {
+  technologyId: string
+  defaultSection?: string | null
+  highlightItemId?: string | null
+}) {
+  const [openSections, setOpenSections] = useState<Set<Section>>(
+    defaultSection ? new Set([defaultSection as Section]) : new Set()
+  )
 
   const { data: commands } = useQuery({
     queryKey: ['commands', technologyId],
@@ -28,9 +34,9 @@ export function TechExpandedRow({ technologyId }: { technologyId: string }) {
   })
 
   const sections = [
-    { key: 'commands' as Section, label: 'Commands', count: commands?.length ?? 0, Icon: Terminal, content: <CommandList technologyId={technologyId} /> },
-    { key: 'links' as Section, label: 'Links', count: links?.length ?? 0, Icon: Link2, content: <LinkList technologyId={technologyId} /> },
-    { key: 'notes' as Section, label: 'Notes', count: notes?.length ?? 0, Icon: FileText, content: <NoteList technologyId={technologyId} /> },
+    { key: 'commands' as Section, label: 'Commands', count: commands?.length ?? 0, Icon: Terminal, content: <CommandList technologyId={technologyId} highlightItemId={defaultSection === 'commands' ? highlightItemId : null} /> },
+    { key: 'links' as Section, label: 'Links', count: links?.length ?? 0, Icon: Link2, content: <LinkList technologyId={technologyId} highlightItemId={defaultSection === 'links' ? highlightItemId : null} /> },
+    { key: 'notes' as Section, label: 'Notes', count: notes?.length ?? 0, Icon: FileText, content: <NoteList technologyId={technologyId} highlightItemId={defaultSection === 'notes' ? highlightItemId : null} /> },
   ]
 
   return (

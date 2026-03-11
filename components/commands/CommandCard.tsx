@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Copy, Check, Pencil, Trash2 } from 'lucide-react'
@@ -9,14 +9,26 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
+import { cn } from '@/lib/utils'
 import { CommandForm } from './CommandForm'
 import { Command } from '@/lib/supabase'
 import { updateCommand, deleteCommand } from '@/lib/queries'
 
-export function CommandCard({ cmd, technologyId }: { cmd: Command; technologyId: string }) {
+export function CommandCard({ cmd, technologyId, isHighlighted }: { cmd: Command; technologyId: string; isHighlighted?: boolean }) {
   const queryClient = useQueryClient()
   const [copied, setCopied] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
+  const [highlighted, setHighlighted] = useState(false)
+
+  useEffect(() => {
+    if (!isHighlighted) return
+    setHighlighted(true)
+    setTimeout(() => {
+      document.getElementById(`cmd-${cmd.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 150)
+    const t = setTimeout(() => setHighlighted(false), 1800)
+    return () => clearTimeout(t)
+  }, [isHighlighted, cmd.id])
 
   function handleCopy() {
     navigator.clipboard.writeText(cmd.command)
@@ -47,7 +59,7 @@ export function CommandCard({ cmd, technologyId }: { cmd: Command; technologyId:
 
   return (
     <>
-      <Card>
+      <Card id={`cmd-${cmd.id}`} className={cn('transition-colors duration-700', highlighted && 'ring-2 ring-primary/50 bg-primary/5')}>
         <CardContent className="pt-4 space-y-2">
           <div className="flex items-start justify-between gap-2">
             <code className="font-mono text-sm bg-muted px-2 py-1 rounded flex-1 break-all">

@@ -13,7 +13,7 @@ import { NoteForm } from './NoteForm'
 import { fetchNotes, createNote } from '@/lib/queries'
 import { SortKey, SORT_OPTIONS, sortItems } from '@/lib/sort'
 
-export function NoteList({ technologyId }: { technologyId: string }) {
+export function NoteList({ technologyId, highlightItemId }: { technologyId: string; highlightItemId?: string | null }) {
   const queryClient = useQueryClient()
   const [createOpen, setCreateOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -81,7 +81,7 @@ export function NoteList({ technologyId }: { technologyId: string }) {
       ) : (
         <div className="space-y-2">
           {sorted.map((note) => (
-            <NoteCard key={note.id} note={note} technologyId={technologyId} />
+            <NoteCard key={note.id} note={note} technologyId={technologyId} isHighlighted={highlightItemId === note.id} />
           ))}
         </div>
       )}

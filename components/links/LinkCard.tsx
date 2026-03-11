@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { ExternalLink, Pencil, Trash2 } from 'lucide-react'
@@ -8,13 +8,25 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
+import { cn } from '@/lib/utils'
 import { LinkForm } from './LinkForm'
 import { Link } from '@/lib/supabase'
 import { updateLink, deleteLink } from '@/lib/queries'
 
-export function LinkCard({ link, technologyId }: { link: Link; technologyId: string }) {
+export function LinkCard({ link, technologyId, isHighlighted }: { link: Link; technologyId: string; isHighlighted?: boolean }) {
   const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = useState(false)
+  const [highlighted, setHighlighted] = useState(false)
+
+  useEffect(() => {
+    if (!isHighlighted) return
+    setHighlighted(true)
+    setTimeout(() => {
+      document.getElementById(`link-${link.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 150)
+    const t = setTimeout(() => setHighlighted(false), 1800)
+    return () => clearTimeout(t)
+  }, [isHighlighted, link.id])
 
   const updateMutation = useMutation({
     mutationFn: (data: { url: string; title: string }) => updateLink(link.id, data),
@@ -39,7 +51,7 @@ export function LinkCard({ link, technologyId }: { link: Link; technologyId: str
 
   return (
     <>
-      <Card>
+      <Card id={`link-${link.id}`} className={cn('transition-colors duration-700', highlighted && 'ring-2 ring-primary/50 bg-primary/5')}>
         <CardContent className="pt-4 flex items-center justify-between gap-2">
           <a
             href={link.url}

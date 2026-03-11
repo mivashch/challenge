@@ -14,10 +14,13 @@ import { TechExpandedRow } from './TechExpandedRow'
 import { Technology } from '@/lib/supabase'
 import { updateTechnology, deleteTechnology, generatePublicToken, revokePublicToken } from '@/lib/queries'
 
-export function TechRowItem({ tech, isExpanded, onToggle }: {
+export function TechRowItem({ tech, isExpanded, isHighlighted, onToggle, defaultSection, highlightItemId }: {
   tech: Technology
   isExpanded: boolean
+  isHighlighted?: boolean
   onToggle: () => void
+  defaultSection?: string | null
+  highlightItemId?: string | null
 }) {
   const queryClient = useQueryClient()
   const [editOpen, setEditOpen] = useState(false)
@@ -74,7 +77,7 @@ export function TechRowItem({ tech, isExpanded, onToggle }: {
 
   return (
     <>
-      <div className={cn('group border-b border-border/30', isExpanded && 'bg-primary/5')}>
+      <div id={`tech-${tech.id}`} className={cn('group border-b border-border/30 transition-colors duration-700', isExpanded && 'bg-primary/5', isHighlighted && 'bg-primary/20')}>
         <div className="flex items-center gap-2 px-4 py-3 hover:bg-accent/30 transition-colors">
           {/* Expand toggle — takes up most of the row */}
           <button
@@ -139,7 +142,7 @@ export function TechRowItem({ tech, isExpanded, onToggle }: {
           </div>
         </div>
 
-        {isExpanded && <TechExpandedRow technologyId={tech.id} />}
+        {isExpanded && <TechExpandedRow technologyId={tech.id} defaultSection={defaultSection} highlightItemId={highlightItemId} />}
       </div>
 
       <Dialog open={editOpen} onOpenChange={setEditOpen}>

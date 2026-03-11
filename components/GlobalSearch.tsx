@@ -97,7 +97,7 @@ export function GlobalSearch() {
                   {results.technologies.map((t) => (
                     <button
                       key={t.id}
-                      onClick={() => navigate(`/technologies/${t.id}`)}
+                      onClick={() => navigate(`/?highlight=${t.id}`)}
                       className="w-full text-left px-3 py-2 rounded-md hover:bg-accent text-sm flex items-center gap-2"
                     >
                       <span className="font-medium">{t.name}</span>
@@ -115,7 +115,7 @@ export function GlobalSearch() {
                   {results.commands.map((c) => (
                     <button
                       key={c.id}
-                      onClick={() => navigate(`/technologies/${c.technology_id}`)}
+                      onClick={() => navigate(`/?highlight=${c.technology_id}&section=commands&item=${c.id}`)}
                       className="w-full text-left px-3 py-2 rounded-md hover:bg-accent text-sm flex items-start gap-2"
                     >
                       <code className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded shrink-0 max-w-[200px] truncate">{c.command}</code>
@@ -133,7 +133,7 @@ export function GlobalSearch() {
                   {results.links.map((l) => (
                     <button
                       key={l.id}
-                      onClick={() => navigate(`/technologies/${l.technology_id}`)}
+                      onClick={() => navigate(`/?highlight=${l.technology_id}&section=links&item=${l.id}`)}
                       className="w-full text-left px-3 py-2 rounded-md hover:bg-accent text-sm flex items-center gap-2"
                     >
                       <span className="truncate">{l.title || l.url}</span>
@@ -151,7 +151,7 @@ export function GlobalSearch() {
                   {results.notes.map((n) => (
                     <button
                       key={n.id}
-                      onClick={() => navigate(`/technologies/${n.technology_id}`)}
+                      onClick={() => navigate(`/?highlight=${n.technology_id}&section=notes&item=${n.id}`)}
                       className="w-full text-left px-3 py-2 rounded-md hover:bg-accent text-sm flex items-center gap-2"
                     >
                       <span className="truncate text-xs">{n.content.slice(0, 80)}</span>

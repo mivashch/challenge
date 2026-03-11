@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { Plus } from 'lucide-react'
@@ -14,9 +15,32 @@ import { TechRowItem } from './technologies/TechRowItem'
 
 export function TechHubView() {
   const queryClient = useQueryClient()
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
+  const [highlightId, setHighlightId] = useState<string | null>(null)
+  const [highlightTechId, setHighlightTechId] = useState<string | null>(null)
+  const [expandSection, setExpandSection] = useState<string | null>(null)
+  const [highlightItemId, setHighlightItemId] = useState<string | null>(null)
   const [createOpen, setCreateOpen] = useState(false)
   const [sortKey, setSortKey] = useState<SortKey>('created_desc')
+
+  useEffect(() => {
+    const id = searchParams.get('highlight')
+    if (!id) return
+    const section = searchParams.get('section')
+    const item = searchParams.get('item')
+    router.replace('/')
+    setExpandedIds(prev => { const next = new Set(prev); next.add(id); return next })
+    setHighlightId(id)
+    if (section) { setExpandSection(section); setHighlightTechId(id) }
+    if (item) setHighlightItemId(item)
+    setTimeout(() => {
+      document.getElementById(`tech-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 80)
+    setTimeout(() => setHighlightId(null), 1800)
+    setTimeout(() => { setExpandSection(null); setHighlightItemId(null); setHighlightTechId(null) }, 2500)
+  }, [searchParams, router])
 
   const { data: technologies, isLoading } = useQuery({
     queryKey: ['technologies'],
@@ -78,11 +102,14 @@ export function TechHubView() {
             key={tech.id}
             tech={tech}
             isExpanded={expandedIds.has(tech.id)}
+            isHighlighted={highlightId === tech.id}
             onToggle={() => setExpandedIds(prev => {
               const next = new Set(prev)
               next.has(tech.id) ? next.delete(tech.id) : next.add(tech.id)
               return next
             })}
+            defaultSection={highlightTechId === tech.id ? expandSection : null}
+            highlightItemId={highlightTechId === tech.id ? highlightItemId : null}
           />
         ))}
       </div>

@@ -13,7 +13,7 @@ import { CommandForm } from './CommandForm'
 import { fetchCommands, createCommand } from '@/lib/queries'
 import { SortKey, SORT_OPTIONS, sortItems } from '@/lib/sort'
 
-export function CommandList({ technologyId }: { technologyId: string }) {
+export function CommandList({ technologyId, highlightItemId }: { technologyId: string; highlightItemId?: string | null }) {
   const queryClient = useQueryClient()
   const [createOpen, setCreateOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -82,7 +82,7 @@ export function CommandList({ technologyId }: { technologyId: string }) {
       ) : (
         <div className="space-y-2">
           {sorted.map((cmd) => (
-            <CommandCard key={cmd.id} cmd={cmd} technologyId={technologyId} />
+            <CommandCard key={cmd.id} cmd={cmd} technologyId={technologyId} isHighlighted={highlightItemId === cmd.id} />
           ))}
         </div>
       )}
