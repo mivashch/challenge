@@ -40,7 +40,7 @@ export function TechExpandedRow({ technologyId, defaultSection, highlightItemId 
   ]
 
   return (
-    <div className="bg-muted">
+    <div className="bg-muted dark:bg-[#18191a]">
       {sections.map((section, i) => (
         <div key={section.key} className={cn(i > 0 && 'border-t border-border')}>
           <button
