@@ -12,7 +12,7 @@ import { NoteList } from '@/components/notes/NoteList'
 type Section = 'commands' | 'links' | 'notes'
 
 export function TechExpandedRow({ technologyId }: { technologyId: string }) {
-  const [openSection, setOpenSection] = useState<Section | null>(null)
+  const [openSections, setOpenSections] = useState<Set<Section>>(new Set())
 
   const { data: commands } = useQuery({
     queryKey: ['commands', technologyId],
@@ -38,10 +38,14 @@ export function TechExpandedRow({ technologyId }: { technologyId: string }) {
       {sections.map((section, i) => (
         <div key={section.key} className={cn(i > 0 && 'border-t border-border/20')}>
           <button
-            onClick={() => setOpenSection(openSection === section.key ? null : section.key)}
+            onClick={() => setOpenSections(prev => {
+              const next = new Set(prev)
+              next.has(section.key) ? next.delete(section.key) : next.add(section.key)
+              return next
+            })}
             className="w-full flex items-center gap-2.5 pl-10 pr-5 py-2.5 hover:bg-accent/40 transition-colors"
           >
-            {openSection === section.key
+            {openSections.has(section.key)
               ? <ChevronDown className="w-3 h-3 text-muted-foreground shrink-0" />
               : <ChevronRight className="w-3 h-3 text-muted-foreground shrink-0" />}
             <section.Icon className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
@@ -50,7 +54,7 @@ export function TechExpandedRow({ technologyId }: { technologyId: string }) {
               {section.count}
             </span>
           </button>
-          {openSection === section.key && (
+          {openSections.has(section.key) && (
             <div className="pl-10 pr-5 pb-4 pt-2">
               {section.content}
             </div>

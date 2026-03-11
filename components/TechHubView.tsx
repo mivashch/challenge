@@ -12,7 +12,7 @@ import { TechRowItem } from './technologies/TechRowItem'
 
 export function TechHubView() {
   const queryClient = useQueryClient()
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
   const [createOpen, setCreateOpen] = useState(false)
 
   const { data: technologies, isLoading } = useQuery({
@@ -62,8 +62,12 @@ export function TechHubView() {
           <TechRowItem
             key={tech.id}
             tech={tech}
-            isExpanded={expandedId === tech.id}
-            onToggle={() => setExpandedId(expandedId === tech.id ? null : tech.id)}
+            isExpanded={expandedIds.has(tech.id)}
+            onToggle={() => setExpandedIds(prev => {
+              const next = new Set(prev)
+              next.has(tech.id) ? next.delete(tech.id) : next.add(tech.id)
+              return next
+            })}
           />
         ))}
       </div>
