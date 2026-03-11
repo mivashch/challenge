@@ -37,10 +37,10 @@ export default function SharedLinksPage() {
 
   const shared = technologies?.filter((t) => t.public_token) ?? []
 
-  if (isLoading) return <p className="text-muted-foreground">Loading...</p>
+  if (isLoading) return <div className="p-6"><p className="text-muted-foreground">Loading...</p></div>
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 max-w-3xl mx-auto overflow-y-auto h-full space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold">Shared Links</h2>

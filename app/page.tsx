@@ -1,5 +1,5 @@
-import { TechnologyList } from '@/components/technologies/TechnologyList'
+import { TechHubView } from '@/components/TechHubView'
 
 export default function Home() {
-  return <TechnologyList />
+  return <TechHubView />
 }

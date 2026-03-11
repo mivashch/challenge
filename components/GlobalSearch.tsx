@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Search, Terminal, Link2, FileText, Layers } from 'lucide-react'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { globalSearch, SearchResults } from '@/lib/queries'
@@ -69,6 +70,7 @@ export function GlobalSearch() {
 
       <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) { setQuery(''); setResults(null) } }}>
         <DialogContent className="max-w-lg p-0 gap-0 overflow-hidden">
+          <VisuallyHidden><DialogTitle>Search</DialogTitle></VisuallyHidden>
           <div className="flex items-center border-b px-3">
             <Search className="w-4 h-4 text-muted-foreground shrink-0" />
             <Input

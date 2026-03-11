@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Badge } from '@/components/ui/badge'
 import { CommandList } from '@/components/commands/CommandList'
 import { LinkList } from '@/components/links/LinkList'
 import { NoteList } from '@/components/notes/NoteList'
@@ -17,11 +16,11 @@ export function TechnologyDetailClient({ id }: { id: string }) {
     queryFn: () => fetchTechnology(id),
   })
 
-  if (isLoading) return <p className="text-muted-foreground">Loading...</p>
-  if (isError || !tech) return <p className="text-destructive">Technology not found.</p>
+  if (isLoading) return <div className="p-6"><p className="text-muted-foreground">Loading...</p></div>
+  if (isError || !tech) return <div className="p-6"><p className="text-destructive">Technology not found.</p></div>
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 max-w-4xl mx-auto overflow-y-auto h-full space-y-6">
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="icon" asChild>
           <Link href="/"><ChevronLeft className="w-5 h-5" /></Link>
