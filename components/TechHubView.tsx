@@ -64,7 +64,8 @@ export function TechHubView() {
     const item = searchParams.get('item')
     router.replace('/')
     const tech = technologies?.find((t) => t.id === id)
-    if (tech?.folder_id) setExpandedFolderIds((prev) => new Set(prev).add(tech.folder_id))
+    const folderId = tech?.folder_id ?? null
+    if (folderId) setExpandedFolderIds((prev) => new Set(prev).add(folderId))
     setExpandedTechIds((prev) => new Set(prev).add(id))
     setHighlightId(id)
     if (section) { setExpandSection(section); setHighlightTechId(id) }
