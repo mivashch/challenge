@@ -1,5 +1,49 @@
 import { createClient } from './supabase-browser'
-import { Technology, Command, Link, Note } from './supabase'
+import { Technology, Command, Link, Note, Folder } from './supabase'
+
+// Folders
+export async function fetchFolders(): Promise<Folder[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('folders')
+    .select('*')
+    .order('sort_order', { ascending: true })
+    .order('name', { ascending: true })
+  if (error) throw error
+  return data
+}
+
+export async function createFolder(payload: { name: string }): Promise<Folder> {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const { data: folders } = await supabase.from('folders').select('sort_order').order('sort_order', { ascending: false }).limit(1)
+  const sort_order = (folders?.[0]?.sort_order ?? -1) + 1
+  const { data, error } = await supabase
+    .from('folders')
+    .insert({ name: payload.name, user_id: user!.id, sort_order })
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function updateFolder(id: string, payload: { name: string }): Promise<Folder> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('folders')
+    .update(payload)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function deleteFolder(id: string): Promise<void> {
+  const supabase = createClient()
+  const { error } = await supabase.from('folders').delete().eq('id', id)
+  if (error) throw error
+}
 
 // Technologies
 export async function fetchTechnologies(): Promise<Technology[]> {
@@ -23,7 +67,7 @@ export async function fetchTechnology(id: string): Promise<Technology> {
   return data
 }
 
-export async function createTechnology(payload: { name: string; description?: string }): Promise<Technology> {
+export async function createTechnology(payload: { name: string; description?: string; folder_id?: string | null }): Promise<Technology> {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   const { data, error } = await supabase
@@ -35,7 +79,7 @@ export async function createTechnology(payload: { name: string; description?: st
   return data
 }
 
-export async function updateTechnology(id: string, payload: { name: string; description?: string }): Promise<Technology> {
+export async function updateTechnology(id: string, payload: { name: string; description?: string; folder_id?: string | null }): Promise<Technology> {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('technologies')

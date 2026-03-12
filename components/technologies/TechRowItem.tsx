@@ -11,11 +11,12 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { TechnologyForm } from './TechnologyForm'
 import { TechExpandedRow } from './TechExpandedRow'
-import { Technology } from '@/lib/supabase'
+import { Technology, Folder } from '@/lib/supabase'
 import { updateTechnology, deleteTechnology, generatePublicToken, revokePublicToken } from '@/lib/queries'
 
-export function TechRowItem({ tech, isExpanded, isHighlighted, onToggle, defaultSection, highlightItemId }: {
+export function TechRowItem({ tech, folders = [], isExpanded, isHighlighted, onToggle, defaultSection, highlightItemId }: {
   tech: Technology
+  folders?: Folder[]
   isExpanded: boolean
   isHighlighted?: boolean
   onToggle: () => void
@@ -39,9 +40,10 @@ export function TechRowItem({ tech, isExpanded, isHighlighted, onToggle, default
   }
 
   const updateMutation = useMutation({
-    mutationFn: (data: { name: string; description?: string }) => updateTechnology(tech.id, data),
+    mutationFn: (data: { name: string; description?: string; folder_id?: string | null }) => updateTechnology(tech.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['technologies'] })
+      queryClient.invalidateQueries({ queryKey: ['folders'] })
       setEditOpen(false)
       toast.success('Technology updated')
     },
@@ -150,6 +152,7 @@ export function TechRowItem({ tech, isExpanded, isHighlighted, onToggle, default
           <DialogHeader><DialogTitle>Edit Technology</DialogTitle></DialogHeader>
           <TechnologyForm
             initial={tech}
+            folders={folders}
             onSubmit={(data) => updateMutation.mutate(data)}
             onCancel={() => setEditOpen(false)}
             loading={updateMutation.isPending}
