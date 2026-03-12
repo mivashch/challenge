@@ -33,7 +33,7 @@ export function TechnologyCard({ tech }: { tech: Technology }) {
   }
 
   const updateMutation = useMutation({
-    mutationFn: (data: { name: string; description: string }) =>
+    mutationFn: (data: { name: string; description?: string; folder_id?: string | null }) =>
       updateTechnology(tech.id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['technologies'] })

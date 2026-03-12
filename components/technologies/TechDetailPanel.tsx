@@ -38,7 +38,7 @@ export function TechDetailPanel({ id, onClose }: { id: string; onClose: () => vo
   }
 
   const updateMutation = useMutation({
-    mutationFn: (data: { name: string; description?: string }) => updateTechnology(id, data),
+    mutationFn: (data: { name: string; description?: string; folder_id?: string | null }) => updateTechnology(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['technologies'] })
       queryClient.invalidateQueries({ queryKey: ['technology', id] })
